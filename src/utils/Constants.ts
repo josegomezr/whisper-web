@@ -1,6 +1,21 @@
+const supportedModels = {
+    // Original checkpoints
+    "Xenova/whisper-tiny": [41, 152],
+    "Xenova/whisper-base": [77, 291],
+    "Xenova/whisper-small": [249],
+    'Xenova/whisper-medium': [776],
+    // Distil Whisper (English-only)
+    'distil-whisper/distil-medium.en': [402],
+    'distil-whisper/distil-large-v2': [767],
+};
+
 function mobileTabletCheck() {
     // https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
     let check = false;
+
+    if(typeof navigator === "undefined")
+        return check;
+
     (function (a: string) {
         if (
             /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(
@@ -13,10 +28,10 @@ function mobileTabletCheck() {
             check = true;
     })(
         navigator.userAgent ||
-            navigator.vendor ||
-            ("opera" in window && typeof window.opera === "string"
-                ? window.opera
-                : ""),
+              navigator.vendor ||
+              ("opera" in window && typeof window.opera === "string"
+                  ? window.opera
+                  : ""),
     );
     return check;
 }
@@ -26,9 +41,10 @@ export default {
     DEFAULT_AUDIO_URL: `https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/${
         isMobileOrTablet ? "jfk" : "ted_60_16k"
     }.wav`,
-    DEFAULT_MODEL: "Xenova/whisper-tiny",
+    DEFAULT_MODEL: Object.keys(supportedModels)[0],
     DEFAULT_SUBTASK: "transcribe",
     DEFAULT_LANGUAGE: "english",
     DEFAULT_QUANTIZED: isMobileOrTablet,
-    DEFAULT_MULTILINGUAL: false,
+    DEFAULT_MULTILINGUAL: true,
+    SUPPORTED_MODELS: supportedModels,
 };
